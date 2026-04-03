@@ -2,36 +2,43 @@
 
 A modular AI platform built with FastAPI + custom Model Garden architecture, enabling seamless integration of multiple AI models (Groq, OpenAI, Qwen, etc.) with a clean and interactive frontend.
 
-🔥 Features
+🔥 Features:
 
-  🧠 Model Garden Architecture
+  🧠 Model Garden Architecture:
+  
       Plug-and-play system to register and use multiple AI models
       Easily extendable with new connectors (Groq, OpenAI, Qwen)
       
-  ⚡FastAPI Backend
+  ⚡FastAPI Backend:
+  
       RESTful API with structured routing
       Scalable and production-ready architecture
       Clean separation of controller, services, and models
       
-  💬ChatGPT-style Frontend UI
+  💬ChatGPT-style Frontend UI:
+  
       Interactive chat interface
       Smooth user experience with chat bubbles
       Markdown-supported responses (bold, lists, formatting)
       
-  🔗Unified API Endpoint
+  🔗Unified API Endpoint:
+  
       Single endpoint for all model interactions:
       POST /api/v1/model/generate
       
-  ⚙️Configurable Model Parameters
+  ⚙️Configurable Model Parameters:
+  
       Temperature
       Max tokens
       Top-p sampling
       Seed control
       
-  🌐CORS Enabled
+  🌐CORS Enabled:
+  
       Works seamlessly with local frontend and external clients
 
-🏗️ Project Structure
+🏗️ Project Structure:
+
       model garden/
       │
       ├── app/
@@ -46,7 +53,8 @@ A modular AI platform built with FastAPI + custom Model Garden architecture, ena
       ├── requirements.txt
 
 
-⚡ How It Works
+⚡ How It Works:
+
       User sends a prompt from the frontend
       Request hits FastAPI endpoint
       Model Garden selects the appropriate model
@@ -54,7 +62,8 @@ A modular AI platform built with FastAPI + custom Model Garden architecture, ena
       Response is returned and rendered in the UI
 
 
-📡 API Example
+📡 API Example:
+
       POST /api/v1/model/generate
       {
         "model": "llama-3.3-70b-versatile",
