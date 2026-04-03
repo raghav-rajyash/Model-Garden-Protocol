@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI Toolkit Chat</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    header {
+      padding: 15px;
+      background: #1e293b;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    #chat {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .msg {
+      max-width: 70%;
+      padding: 10px 15px;
+      margin: 10px 0;
+      border-radius: 12px;
+      line-height: 1.4;
+    }
+
+    .user {
+      background: #3b82f6;
+      margin-left: auto;
+    }
+
+    .bot {
+      background: #1e293b;
+      margin-right: auto;
+    }
+
+    #inputBox {
+      display: flex;
+      padding: 10px;
+      background: #1e293b;
+    }
+
+    textarea {
+      flex: 1;
+      resize: none;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+    }
+
+    button {
+      margin-left: 10px;
+      padding: 10px 20px;
+      border: none;
+      background: #3b82f6;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #2563eb;
+    }
+
+    .loading {
+      opacity: 0.6;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+<header>🚀 AI Toolkit (Chat UI)</header>
+
+<div id="chat"></div>
+
+<div id="inputBox">
+  <textarea id="prompt" rows="2" placeholder="Type your message..."></textarea>
+  <button onclick="sendMessage()">Send</button>
+</div>
+
+<script>
+const API_URL = "http://127.0.0.1:8000/api/v1/model/generate";
+
+function addMessage(text, type) {
+  const chat = document.getElementById("chat");
+  const div = document.createElement("div");
+  div.className = "msg " + type;
+  div.innerHTML = marked.parse(text);
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  return div;
+}
+
+async function sendMessage() {
+  const input = document.getElementById("prompt");
+  const text = input.value.trim();
+  if (!text) return;
+
+  input.value = "";
+
+  // user message
+  addMessage(text, "user");
+
+  // loading message
+  const loadingMsg = addMessage("Thinking...", "bot loading");
+
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "llama-3.3-70b-versatile",
+        prompt: text,
+        config: {
+          temperature: 0.7,
+          top_p: 1,
+          max_tokens: 1000,
+          frequency_penalty: 0,
+          presence_penalty: 0,
+          stop: [""],
+          seed: 1
+        }
+      })
+    });
+
+    const data = await res.json();
+
+    loadingMsg.remove();
+
+    addMessage(data.response || "No response", "bot");
+
+  } catch (err) {
+    loadingMsg.remove();
+    addMessage("Error connecting to backend", "bot");
+    console.error(err);
+  }
+}
+</script>
+
+</body>
+</html>
